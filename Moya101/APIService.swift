@@ -13,17 +13,18 @@ enum APIService {
     case forecastWeather(lat: String, lon: String)
 }
 
+
+
 extension APIService: TargetType {
 
     var baseURL: URL { URL(string: BaseAPI.baseURL)!}
     
     var path: String {
         switch self {
-        case .currentWeather(let lat, let lon) :
-            return "/weather?lat=\(lat)&lon=\(lon)&appid=\(BaseAPI.apiKey)"
-            
-        case .forecastWeather(let lat, let lon) :
-            return "/forecast?lat=\(lat)&lon=\(lon)&appid=\(BaseAPI.apiKey)"
+        case .currentWeather(_, _) :
+            return "weather"
+        case .forecastWeather(_, _) :
+            return "forecast"
         }
     }
     
@@ -37,9 +38,9 @@ extension APIService: TargetType {
     var task: Task {
         switch self {
         case let .currentWeather(lat, lon) :
-            return .requestParameters(parameters: ["lat" : lat, "lon" : lon, "appid" : BaseAPI.apiKey], encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: ["lat" : lat, "lon" : lon, "appid" : BaseAPI.apiKey, "units" : "metric"], encoding: URLEncoding.queryString)
         case let .forecastWeather(lat, lon):
-            return .requestParameters(parameters: ["lat" : lat, "lon" : lon, "appid" : BaseAPI.apiKey], encoding: URLEncoding.queryString)
+            return .requestParameters(parameters: ["lat" : lat, "lon" : lon, "appid" : BaseAPI.apiKey, "units" : "metric"], encoding: URLEncoding.queryString)
         }
     }
     

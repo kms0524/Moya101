@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct CurrentWeatherModel: Codable {
+    let main: Main
+}

@@ -8,7 +8,10 @@ target 'Moya101' do
   # Pods for Moya101
 
 pod 'RxSwift'
+pod 'RxCocoa'
+pod 'RxViewController'
 pod 'Moya', '~> 15.0'
 pod 'Moya/RxSwift', '~> 15.0'
+pod 'ReactorKit'
 
 end
