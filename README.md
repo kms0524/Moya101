@@ -321,10 +321,11 @@ func mutate(action: Action) -> Observable<Mutation> {
 ```swift
 func reduce(state: State, mutation: Mutation) -> State {
         
-        var newState = state
+        var newState = state // 새로운 상태를 기존 상태에 덮어쓴 상태로 선언
         
         switch mutation {
         case .checkCurrentWeather(let currentWeatherModel):
+        // mutate의 Observable에서 방출된 값들을 새로운 상태에 할당해주기
             newState.temp = currentWeatherModel.main.temp
             newState.tempMin = currentWeatherModel.main.tempMin
             newState.tempMax = currentWeatherModel.main.tempMax
@@ -334,13 +335,71 @@ func reduce(state: State, mutation: Mutation) -> State {
             newState.tempMin = wetherForecastModel.list[0].main.tempMin
             newState.tempMax = wetherForecastModel.list[0].main.tempMax
             newState.dt = wetherForecastModel.list[0].dtTxt
-            newState.isShowingForeacted = false
+            newState.isShowingForeacted = false // 현재 상태가 예상 온도를 보여주는 상태일시, isHidden에 할당할 bool 값
         }
         
         return newState
     }
 
-``
+```
+다시 View로 돌아와, bind를 구성하자.
 
-
+```swift
+func bindAction(_ reactor: MainReactor) {
+        
+        // 뷰가 나타날시, 최초화면은 현재 온도를 보여주는 화면으로 설정하였다.
+        self.rx.viewWillAppear
+            .subscribe(onNext: {_ in
+                reactor.action.onNext(.tappedCurrentWeather)
+            })
+            .disposed(by: disposeBag)
+        
+        currentWeatherButton.rx.tap
+            .subscribe(onNext: {
+                reactor.action.onNext(.tappedCurrentWeather)
+            })
+            .disposed(by: disposeBag)
+        
+        forecastWeatherButton.rx.tap
+            .subscribe(onNext: {
+                reactor.action.onNext(.tappedForecastedWeather)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func bindState(_ reactor: MainReactor) {
+        
+        // 예상 온도를 보여줄시, 해당 시간을 보여주는 label을 isHidden 할지 안할지 결정 하였다.
+        reactor.state.map {
+            $0.isShowingForeacted
+        }
+        .bind(to: dtLabel.rx.isHidden)
+        .disposed(by: disposeBag)
+        
+        reactor.state.map  {
+            String("\($0.dt) 시의 예상 기온")
+        }
+        .bind(to: dtLabel.rx.text)
+        .disposed(by: disposeBag)
+        
+        reactor.state.map {
+            String("온도 : \($0.temp)")
+        }
+        .bind(to: tempLabel.rx.text)
+        .disposed(by: disposeBag)
+        
+        reactor.state.map {
+            String("최고 온도 : \($0.tempMax)")
+        }
+        .bind(to: tempMaxLabel.rx.text)
+        .disposed(by: disposeBag)
+        
+        reactor.state.map {
+            String("최저 온도 : \($0.tempMin)")
+        }
+        .bind(to: tempMinLabel.rx.text)
+        .disposed(by: disposeBag)
+    }
+    
+```
 
