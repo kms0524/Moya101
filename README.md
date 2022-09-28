@@ -402,4 +402,5 @@ func bindAction(_ reactor: MainReactor) {
     }
     
 ```
+![Simulator Screen Recording - iPhone 13 Pro - 2022-09-28 at 19 20 13](https://user-images.githubusercontent.com/48994081/192755195-45e31c46-d8c7-4fae-829f-0127f33b5367.gif)
 
