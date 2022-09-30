@@ -402,5 +402,9 @@ func bindAction(_ reactor: MainReactor) {
     }
     
 ```
+
+### 결과 화면
+
 ![Simulator Screen Recording - iPhone 13 Pro - 2022-09-28 at 19 20 13](https://user-images.githubusercontent.com/48994081/192755195-45e31c46-d8c7-4fae-829f-0127f33b5367.gif)
 
+위와 화면과 같이 최초 실행시, 현재 온도를 보여주는 화면이 나오고, Forecast 버튼을 누르면 4시간뒤의 예상 온도가 나오게 된다.
